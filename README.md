@@ -4,7 +4,7 @@
 
 This repository contains the **Requirement Analysis and Specification Document (RASD)** and the **Design Document (DD)**
 for the project **“Best Bike Paths (BBP)”**, developed as part of the  
-**Software Engineering II course at **Politecnico di Milano** during the **Academic Year 2025/2026**.
+Software Engineering II course at **Politecnico di Milano** during the **Academic Year 2025/2026**.
 
 The project follows the official *Requirement Engineering and Design Project* specification provided by the course staff
 and aims at applying rigorous software engineering methodologies to the analysis and design of a complex software system.
