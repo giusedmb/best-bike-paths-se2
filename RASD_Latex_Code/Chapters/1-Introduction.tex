@@ -1,0 +1,324 @@
+\chapter{Introduction}
+\label{ch:introduction}% 
+% The \label{...}% enables to remove the small indentation that is generated, always leave the % symbol.
+\par Best Bike Paths (BBP) is a software system designed to support cyclists in creating, exploring, and maintaining an organized inventory of bike paths. The platform enables registered users to record their trips, monitor their cycling activities, and access meaningful statistics such as total distance, average speed, and performance metrics. When available, trip information can be enriched with meteorological data retrieved from external services, providing users with a more complete overview of their routes.
+
+In addition to trip management, BBP allows users to manually insert information about bike paths, including their condition and the presence of obstacles such as potholes, debris, or other hazards. The system also offers an automated mode for acquiring data through mobile sensors (e.g., GPS, accelerometer, gyroscope), with a confirmation step to ensure reliability.
+
+This document provides a comprehensive description of BBP's capabilities, constraints, and design decisions. Its purpose is to serve as a detailed reference for the development team and as a clear source of information for all stakeholders involved, including cyclists, associations, and maintenance authorities.
+
+\section{Purpose}
+\label{sec:purpose}%
+\par This document primarily serves as a comprehensive reference for the development team responsible for implementing Best Bike Paths (BBP).
+
+\par Moreover, this material aims to provide an authoritative overview of the system’s functionalities and constraints, ensuring a clear and shared understanding among all stakeholders, particularly the cyclists and administrative bodies.
+
+\pagebreak
+
+\subsection{Goals}
+\label{subsec:goals}%
+\begin{longtable}{|l|p{0.9\textwidth}|}
+    \hline
+    \textbf{Goal} & \textbf{Description} \\
+    \hline \hline
+
+    \multicolumn{2}{|l|}{\textit{From a registered user perspective...}} \\
+    \hline
+    G01 & Allow the RU to create and manage a personal account. \\
+    \hline
+    G02 & Allow the RU to record private personal trips (manual or automatic). \\
+    \hline
+    G03 & Allow the RU to view detailed statistics for each trip (distance, speed, performance metrics). \\
+    \hline
+    G04 & Allow the RU to manually insert path information by selecting streets and specifying their status. \\
+    \hline
+    G05 & Allow the RU to collect automatic trip data via mobile sensors (GPS, accelerometer, gyroscope). \\
+    \hline
+    G06 & Allow the RU to confirm or correct automatically inferred obstacles or street conditions. \\
+    \hline
+    G07 & Allow the RU to publish, edit, or delete paths they contributed. \\
+    \hline
+    G08 & Allow the RU to see a dashboard summarizing their cycling activity. \\
+    \hline
+
+    \multicolumn{2}{|l|}{\textit{From any user (registered or casual)...}} \\
+    \hline
+    G09 & Allow users to browse all published paths and their associated conditions. \\
+    \hline
+    G10 & Allow users to search for paths based on origin and destination. \\
+    \hline
+    G11 & Allow users to view map representations of possible routes. \\
+    \hline
+    G12 & Allow users to sort or filter paths based on score or conditions. \\
+    \hline
+
+    \multicolumn{2}{|l|}{\textit{From a system perspective...}} \\
+    \hline
+    G13 & Enable the system to compute the score of a trip/path based on its characteristics. \\
+    \hline
+    G14 & Enable the system to enrich trips with meteorological information from an external weather service. \\
+    \hline
+    G15 & Enable the system to detect anomalies such as potholes using sensor data. \\
+    \hline
+    G16 & Enable the system to merge similar paths contributed by multiple users, considering freshness and disagreement handling. \\
+    \hline
+    G17 & Enable the system to visualize map data using a mapping API (e.g., OpenStreetMap). \\
+    \hline
+
+    \caption{Goals Table for Best Bike Paths (BBP)}
+\end{longtable}
+\label{tab:goalsBBP}
+
+\section{Scope}
+\label{sec:scope}%
+
+\par This section defines the boundaries of the Best Bike Paths (BBP) system by analyzing the real-world context in which it operates and the interactions between the system and external entities. We introduce the relevant world phenomena and the shared phenomena that represent the exchange of information between the system and its environment. Together, these elements clarify what belongs to the system and how the two domains interact.
+
+\subsection{World Phenomena}
+\label{subsec:world-phenomena}%
+
+\begin{longtable}{|l|p{0.8\textwidth}|}
+    \hline
+    \textbf{Phenomena} & \textbf{Description} \\
+    \hline \hline
+
+    WP01 & Users bike through real-world streets and bike paths. \\
+    \hline
+    WP02 & Users perceive and evaluate street status (optimal, medium, sufficient, requires maintenance, not available). \\
+    \hline
+    WP03 & Obstacles occur in the real world (potholes, leaves, snow, rain, animals). \\
+    \hline
+    WP04 & Mobile-device sensors detect real-world movement (GPS position, acceleration, rotation). \\
+    \hline
+    WP05 & Meteorological conditions exist in the real world (temperature, wind speed, weather events). \\
+    \hline
+    WP06 & Different users perceive the same street with different conditions, causing conflicting data. \\
+    \hline
+    WP07 & Users select real-world points as origin and destination for routing. \\
+    \hline
+
+    \caption{World Phenomena Table for Best Bike Paths (BBP)}
+
+    \label{tab:world-phenomena}
+\end{longtable}
+
+\pagebreak
+
+\subsection{Shared Phenomena}
+\label{subsec:shared-phenomena}%
+\subsubsection*{Explanation of Controller and Observer}
+
+In the context of problem frames, each shared phenomenon involves two entities: 
+the one that \textit{controls} the phenomenon and the one that \textit{observes} it. 
+This distinction clarifies how the interaction between the world and the machine is structured.
+
+
+
+\begin{itemize}
+    \item \textbf{Controller}: the domain or component that \textit{causes} the phenomenon to occur. 
+    It is the entity that initiates, modifies, or generates the event. 
+    For example, when a registered user records a trip or inserts manual information about a bike path, 
+    the user is the \textit{controller} of the phenomenon. 
+    Conversely, when the system computes statistics or merges data from multiple users, the system (BBP) is the controller.
+
+    \item \textbf{Observer}: the domain or component that \textit{perceives} the phenomenon once it has occurred. 
+    It receives or reacts to the outcome of the event but does not generate it. 
+    For instance, when the user submits new information, the system observes it. 
+    When the system displays possible bike paths or computed scores, the user is the observer.
+\end{itemize}
+
+This distinction helps classify each phenomenon as world-controlled, machine-controlled, or shared, 
+and makes explicit the direction of information flow between the user and the system.
+
+\pagebreak
+
+\begin{longtable}{|l|p{0.5\textwidth}|l|l|}
+    \hline
+    \textbf{Phenomena} & \textbf{Description} & \textbf{Controller} & \textbf{Observer} \\
+    \hline \hline
+
+    SP01 & Registered users create or modify their personal trips. 
+          & RU & BBP \\
+    \hline
+
+    SP02 & BBP stores trip information and computes trip statistics. 
+          & BBP & RU \\
+    \hline
+
+    SP03 & Registered users manually insert street segments and their status. 
+          & RU & BBP \\
+    \hline
+
+    SP04 & BBP saves manual path contributions and makes them publishable. 
+          & BBP & RU \\
+    \hline
+
+    SP05 & Sensor data (GPS, accelerometer, gyroscope) is sent from the device to BBP. 
+          & RU & BBP \\
+    \hline
+
+    SP06 & BBP infers anomalies (potholes, obstacles) and shows them to the user for confirmation. 
+          & BBP & RU \\
+    \hline
+
+    SP07 & Users confirm or reject automatically inferred anomalies. 
+          & RU & BBP \\
+    \hline
+
+    SP08 & Users publish, edit, or delete their previously contributed paths. 
+          & RU & BBP \\
+    \hline
+
+    SP09 & Any user requests paths between origin and destination. 
+          & User & BBP \\
+    \hline
+
+    SP10 & BBP displays path options and their score on a map. 
+          & BBP & User \\
+    \hline
+
+    SP11 & The Weather Service provides meteorological information to BBP via API. 
+          & WeatherService & BBP \\
+    \hline
+
+    SP12 & BBP merges path information from different users into a unified representation. 
+          & BBP & Users \\
+    \hline
+
+    \caption{Shared Phenomena Table for Best Bike Paths (BBP)}
+
+    \label{tab:shared-phenomena}
+\end{longtable}
+
+\pagebreak
+
+\section{Definitions, Acronyms, and Abbreviations}
+\label{sec:definitions-acronyms-abbreviations}%
+
+\begin{longtable}{|l|p{0.835\textwidth}|}
+    \hline
+    \textbf{Acronym} & \textbf{Definition} \\
+    \hline \hline
+
+    BBP &
+    Best Bike Paths, the software system described in this document, aimed at supporting cyclists in recording trips,
+    managing bike paths, and sharing information about street conditions. \\
+    \hline
+
+    RASD &
+    Requirements Analysis and Specification Document, the document that describes requirements, constraints,
+    and domain assumptions of the system. \\
+    \hline
+
+    RU &
+    Registered User, an authenticated user of BBP who can record trips, contribute path information,
+    and publish or update bike paths. \\
+    \hline
+
+    GPS &
+    Global Positioning System, used to determine the geographic position of a device during trip recording. \\
+    \hline
+
+    API &
+    Application Programming Interface, an external service interface used by BBP to retrieve map data
+    or meteorological information. \\
+    \hline
+
+    WPx &
+    World Phenomenon number $x$, representing a real-world event or condition outside the system boundary
+    but relevant to the problem domain. \\
+    \hline
+
+    SPx &
+    Shared Phenomenon number $x$, representing an interaction between the system and external actors,
+    involving information exchange. \\
+    \hline
+
+    Path &
+    A bike route composed of one or more street segments, defined either manually by users
+    or derived from recorded trips. \\
+    \hline
+
+    Street &
+    A single road segment that is part of a bike path and can be associated with condition reports
+    and obstacles. \\
+    \hline
+
+    Trip &
+    A cycling activity recorded by a registered user, containing temporal, spatial, and performance data,
+    acquired either manually or automatically. \\
+    \hline
+
+    TrackPoint &
+    A single sampled point of a recorded trip, containing geographic coordinates, timestamp,
+    and optional elevation data. \\
+    \hline
+
+    PathStatus &
+    An enumeration representing the condition of a street or path, such as optimal, medium,
+    sufficient, or requiring maintenance. \\
+    \hline
+
+    QoE &
+    Quality of Experience, a measure of how suitable or comfortable a bike path is perceived to be
+    by users, considering safety, conditions, and usability. \\
+    \hline
+
+    GDPR &
+    General Data Protection Regulation, the European regulation governing the processing and protection
+    of personal data. \\
+    \hline
+
+    EU &
+    European Union, the legal and regulatory context in which BBP is assumed to operate. \\
+    \hline
+
+    \caption{Definitions, Acronyms, and Abbreviations Table}
+    \label{tab:definitions-acronyms-abbreviations}
+\end{longtable}
+
+\section{Revision History}
+\label{sec:revision-history}%
+
+\begin{itemize}
+
+    \item \textbf{Version 1.0} - Initial release of the Requirements Analysis and Specification Document.
+
+\end{itemize}
+
+\section{Reference Documents}
+\label{sec:reference-documents}%
+\begin{itemize}
+    \item Specification document: R\&DD Assignment AY 2025-2026.
+    \item Provided course materials and notes (Politecnico di Milano).
+    \item Alloy Documentation.
+\end{itemize}
+
+\section{Document Structure}
+\label{sec:document-structure}%
+
+\par
+This document is structured to provide a clear and progressive understanding of the Best Bike Paths (BBP) system,
+starting from high-level concepts and gradually introducing more detailed analyses and specifications.
+
+\par
+Chapter~\ref{ch:introduction} introduces the purpose of the system, its main goals, and the overall scope of the problem.
+It defines the relevant world and shared phenomena and clarifies the boundaries between the system and its environment.
+
+\par
+Chapter~\ref{chap:overall_description} provides an overall description of BBP, including representative usage scenarios
+and the high-level domain model. This chapter helps the reader understand how different actors interact with the system
+and how the main entities relate to each other.
+
+\par
+The subsequent chapters focus on the detailed requirements of the system. Functional requirements are presented
+through use cases and scenarios, while non-functional requirements specify quality attributes, constraints,
+and design assumptions.
+
+\par
+Formal aspects of the system are addressed in the chapter dedicated to formal analysis, where key components and
+processes are modeled using Alloy in order to verify consistency, correctness, and critical properties of the system.
+
+\par
+Finally, the document concludes with reference materials and a revision history, ensuring traceability and supporting
+future updates of the specification.
