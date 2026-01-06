@@ -1,0 +1,81 @@
+\chapter{Requirements Traceability}
+\label{ch:requirements-traceability}
+
+This section establishes a mapping between the functional requirements specified in the Requirements Analysis and Specification Document (RASD) and the architectural components described in Chapter 2 of this Design Document. The mapping ensures that every system requirement is addressed by specific architectural modules, guaranteeing comprehensive coverage.
+
+\section*{Users Account Manager Service}
+
+The \textbf{Users Account Manager Service} manages all logic related to user identity, ensuring strict isolation of Personally Identifiable Information (PII) as described in Section 2.2.1.
+
+\begin{itemize}
+    \item \textbf{R01 (Registration)}: Handles user account creation and data persistence in the User Data store.
+    \item \textbf{R02 (Login/Logout)}: Manages authentication logic and session token generation (JWT).
+\end{itemize}
+
+\section*{Mobile Application Components}
+
+The \textbf{Mobile Application} acts as the primary interface for data acquisition and user interaction. Its internal modules (Trip Manager, Sensor Manager, UI Controller, Map Manager) handle the recording loop and local data buffering.
+
+\begin{itemize}
+    \item \textbf{R04 (Start recording)}: Trip Manager orchestrates the initialization of a new recording session.
+    \item \textbf{R05 (Record coordinates)}: Sensor Manager interfaces with hardware to capture GPS samples.
+    \item \textbf{R06 (TrackPoint generation)}: Trip Manager encapsulates raw sensor readings into TrackPoint objects.
+    \item \textbf{R07 (Compute statistics)}: Trip Manager calculates real-time metrics (distance, speed) during the ride.
+    \item \textbf{R08 (Set acquisition mode)}: UI Controller allows the user to select between Manual and Automatic modes.
+    \item \textbf{R10 (Manual street entry)}: Map Manager captures user interactions with the map to define manual paths.
+    \item \textbf{R13 (Confirm/Reject detected obstacles)}: UI Controller presents detected anomalies to the user for validation.
+    \item \textbf{R21 (Display status and score)}: Map Manager renders color-coded paths based on their status and score.
+    \item \textbf{R26 (Display street conditions)}: Map Manager visualizes specific street-level conditions and markers.
+    \item \textbf{R27 (Browse trip history)}: UI Controller displays the list of past trips retrieved from the backend.
+    \item \textbf{R33 (Sensor unavailability notification)}: Sensor Manager detects hardware failures and alerts the user.
+    \item \textbf{R34 (GPS signal notification)}: Sensor Manager monitors location accuracy and notifies the user of poor signal.
+\end{itemize}
+
+\section*{Backend Trip Processing (Ingestion, Aggregation, Scoring)}
+
+The backend processing pipeline handles the high-volume writing operations, including data enrichment, merging, and quality scoring.
+
+\begin{itemize}
+    \item \textbf{R09 (Associate weather)}: Trip Ingestion Service queries the WeatherAPI Wrapper to enrich incoming trip data.
+    \item \textbf{R24 (Update aggregated score)}: Trip Scoring Service recalculates the Quality of Experience (QoE) score based on new data.
+    \item \textbf{R29 (Mark data publishable)}: Trip Aggregation Service handles the publication request (\texttt{PUT /publish}) and triggers the merging process.
+\end{itemize}
+
+\section*{Report Server (Ingestion and Validation Services)}
+
+The \textbf{Report Server} is a dedicated component for handling crowd-sourced data, ensuring that discrete user reports do not interfere with real-time tracking.
+
+\begin{itemize}
+    \item \textbf{R11 (Submit report)}: Report Ingestion Service accepts \texttt{ObstacleReportDTO} payloads from the client.
+    \item \textbf{R12 (Pending status)}: Report Ingestion Service initializes reports with a PENDING status upon receipt.
+    \item \textbf{R14 (Update report status)}: Report Validation Service updates the status to CONFIRMED or REJECTED after validation.
+    \item \textbf{R15 (Associate/Create obstacle)}: Report Validation Service links valid reports to persistent Obstacle entities.
+    \item \textbf{R16 (Obstacle publishability)}: Report Ingestion Service persists the user's visibility preference for the report.
+    \item \textbf{R17 (Store obstacle data)}: Report Server persists validated obstacles in the Obstacles \& Reports Data store.
+    \item \textbf{R18 (Associate obstacle with street)}: Report Validation Service performs map-matching to link obstacles to street segments.
+    \item \textbf{R19 (Update visibility)}: Report Server enforces visibility rules based on the publishability flag.
+    \item \textbf{R22 (Submit path status report)}: Report Ingestion Service receives qualitative feedback on path conditions.
+    \item \textbf{R23 (Path report publishability)}: Report Ingestion Service stores the publishability setting for path status reports.
+    \item \textbf{R35 (Prevent invalid reports)}: Report Validation Service filters out duplicates and spatially inconsistent data.
+\end{itemize}
+
+\section*{Trip Search Server}
+
+The \textbf{Trip Search Server} is a read-optimized component implementing the query side of the CQRS pattern. It is solely responsible for retrieving and filtering data for the user.
+
+\begin{itemize}
+    \item \textbf{R03 (Unregistered access)}: Handles public API requests without requiring a user session token.
+    \item \textbf{R20 (Represent path sequences)}: Returns \texttt{BikePathDTO} objects containing street sequences and geometry.
+    \item \textbf{R25 (Browse paths)}: Executes spatial queries to find and return bike paths matching search criteria.
+    \item \textbf{R28 (View trip details)}: Retrieves comprehensive trip data, including weather and obstacles, for detailed viewing.
+    \item \textbf{R30 (Hide private reports)}: Filters out non-publishable data from query results before returning them to the client.
+\end{itemize}
+
+\section*{External Service Adapters}
+
+These wrapper components abstract the interaction with third-party APIs.
+
+\begin{itemize}
+    \item \textbf{R31 (Retrieve weather data)}: WeatherAPI Wrapper fetches meteorological data from external providers.
+    \item \textbf{R32 (Retrieve map data)}: MapAPI Wrapper interfaces with mapping services (e.g., OpenStreetMap) for routing and geocoding.
+\end{itemize}

@@ -1,0 +1,92 @@
+\chapter{Introduction}
+\label{ch:Introduction}%
+
+\section{Purpose}
+\label{sec:Purpose}%
+
+\par The purpose of this Design Document (DD) is to provide a detailed and structured
+description of the architectural and design choices adopted for the Best Bike Paths (BBP)
+system. The document acts as a technical blueprint that guides the development team
+through the implementation phase, clarifying how the system requirements identified in
+the RASD are concretely addressed.
+
+\par This document aims to ensure a shared and precise understanding of the system’s
+technical solution among all stakeholders involved in the project. By explicitly describing
+components, interactions, and design rationales, it helps align expectations, reduce
+ambiguities, and support coordinated development activities.
+
+\par Furthermore, the DD motivates and documents the main architectural decisions,
+explaining the selection of technologies, architectural styles, and design patterns.
+This information is intended to preserve design consistency over time and to serve as a
+reference for future maintenance, evolution, or extension of the BBP system.
+
+\section{Scope}
+\label{sec:Scope}%
+
+\par As described in the Requirements Analysis and Specification Document (RASD),
+Best Bike Paths (BBP) is a software system designed to support cyclists in discovering,
+recording, and evaluating bike paths based on their quality, safety, and overall suitability.
+The system enables users to record cycling trips, report obstacles and street conditions,
+and access aggregated information about routes shared by the community.
+
+\par BBP integrates data collected manually by users and automatically through mobile
+device sensors, enriching it with external information such as maps and weather conditions.
+The system processes these inputs to compute scores and consolidated evaluations for bike
+paths, supporting informed route selection for both registered and unregistered users.
+
+\par The scope of this Design Document is limited to the technical realization of the BBP
+system. It focuses on software architecture, component design, data management,
+interaction flows, and deployment aspects, without redefining functional or non-functional
+requirements already specified in the RASD.
+
+\section{Definitions, Acronyms, and Abbreviations}
+\label{sec:definitions-acronyms-abbreviations}%
+
+\par This section reports the definitions, acronyms, and abbreviations used throughout
+the document. The terminology is consistent with the RASD to ensure traceability and
+conceptual coherence between requirements and design artifacts.
+
+\section{Revision History}
+\label{sec:revision-history}%
+
+\begin{itemize}
+      \item \textbf{Version 1.0} (2025-01-05): Initial release of the Design Document.
+\end{itemize}
+
+\section{Reference Documents}
+\label{sec:reference-documents}%
+
+\begin{itemize}
+      \item Best Bike Paths (BBP) Requirements Analysis and Specification Document (RASD).
+      \item R\&DD Assignment description, Academic Year 2025--2026.
+      \item Provided course materials and lecture notes.
+\end{itemize}
+
+\section{Document Structure}
+\label{sec:document-structure}%
+
+\begin{enumerate}
+      \item \textbf{Introduction}: Presents the purpose, scope, reference documents, and
+            overall organization of the Design Document, providing the necessary context
+            for understanding the subsequent sections.
+      \item \textbf{Architectural Design}: Describes the high-level architecture of BBP,
+            including major components, their responsibilities, interactions, and
+            deployment environment. Architectural styles and key design decisions are
+            discussed and justified.
+      \item \textbf{Detailed Design}: Provides a deeper view of the internal structure of
+            the system, including component interfaces, data models, and main design
+            patterns adopted to satisfy the requirements.
+      \item \textbf{User Interface Design}: Illustrates the design of the user interfaces,
+            describing how cyclists interact with the system through mobile and, where
+            applicable, web interfaces.
+      \item \textbf{Requirements Traceability}: Maps the requirements defined in the RASD
+            to the architectural and design elements described in this document, ensuring
+            completeness and consistency.
+      \item \textbf{Implementation, Integration, and Test Plan}: Outlines the planned
+            development process, integration strategy, and testing activities required to
+            validate the system.
+      \item \textbf{Effort Spent}: Reports the workload distribution and effort spent by
+            each member of the project team.
+      \item \textbf{References}: Collects all bibliographic and technical references cited
+            throughout the document.
+\end{enumerate}
