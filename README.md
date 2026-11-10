@@ -59,9 +59,6 @@ pdflatex main.tex
 The **RASD and DD were developed collaboratively on Overleaf** to support parallel editing, versioning,
 and clear tracking of individual contributions, as allowed by the course rules.
 
-Final PDF releases are periodically committed to this GitHub repository to comply with the official
-delivery guidelines.
-
 ---
 
 ## About the project
