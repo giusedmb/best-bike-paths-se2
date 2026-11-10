@@ -22,16 +22,13 @@ The repository is organized as follows:
 
 ```
 .
-├── RASD/
-│   ├── sources/          # LaTeX sources for the RASD
-│   └── ...
-├── DD/
-│   ├── sources/          # LaTeX sources for the DD
-│   └── ...
+├── RASD_Latex_Code/      # LaTeX sources of the RASD (main.tex, Chapters/, Images/)
+├── DD_Latex_Code/        # LaTeX sources of the DD (main.tex, chapters/, Images/)
+├── slides_latex/         # LaTeX sources of the presentation slides
+├── slides.pdf            # Compiled slides
 ├── DeliveryFolder/
 │   ├── RASDv1.pdf
-│   ├── DDv1.pdf
-│   └── ...
+│   └── DDv1.pdf
 └── README.md
 ```
 
@@ -44,14 +41,14 @@ Both documents are written in **LaTeX** and can be built locally using the `pdfl
 ### Build the RASD
 
 ```bash
-cd RASD/sources
+cd RASD_Latex_Code
 pdflatex main.tex
 ```
 
 ### Build the DD
 
 ```bash
-cd DD/sources
+cd DD_Latex_Code
 pdflatex main.tex
 ```
 
@@ -61,8 +58,6 @@ pdflatex main.tex
 
 The **RASD and DD were developed collaboratively on Overleaf** to support parallel editing, versioning,
 and clear tracking of individual contributions, as allowed by the course rules.
-
-The full editing history was kept on the Overleaf projects (not linked here).
 
 Final PDF releases are periodically committed to this GitHub repository to comply with the official
 delivery guidelines.
@@ -107,5 +102,5 @@ implementing the system itself.
 
 ## Final grade
 
-*(To be filled after project evaluation)*
+**14.25 / 16**
 
