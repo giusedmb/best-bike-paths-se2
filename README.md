@@ -62,16 +62,7 @@ pdflatex main.tex
 The **RASD and DD were developed collaboratively on Overleaf** to support parallel editing, versioning,
 and clear tracking of individual contributions, as allowed by the course rules.
 
-The following links provide access to the full editing history and evolution of the documents:
-
-- [RASD – Overleaf project]((link removed))  
-
-- [DD – Overleaf project]((link removed))
-
-Through these links, it is possible to inspect:
-- the complete version history,
-- individual contributions by each group member,
-- the progressive refinement of requirements, models, and design decisions.
+The full editing history was kept on the Overleaf projects (not linked here).
 
 Final PDF releases are periodically committed to this GitHub repository to comply with the official
 delivery guidelines.
@@ -100,9 +91,9 @@ implementing the system itself.
 
 ## Authors
 
-- **Giacomo**
-- **Giuseppe**
-- **Lorenzo**
+- Giacomo
+- Giuseppe
+- Lorenzo
 
 ---
 
